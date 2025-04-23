@@ -3,3 +3,34 @@ body {
     font-family: Arial, sans-serif;
   }
   
+@keyframes glitch {
+    0% {
+      opacity: 1;
+      filter: blur(0px);
+      transform: translate(0, 0);
+    }
+    25% {
+      opacity: 0.8;
+      filter: blur(2px);
+      transform: translate(-2px, -2px);
+    }
+    50% {
+      opacity: 0.5;
+      filter: blur(4px);
+      transform: translate(2px, 2px);
+    }
+    75% {
+      opacity: 0.8;
+      filter: blur(2px);
+      transform: translate(-1px, 1px);
+    }
+    100% {
+      opacity: 1;
+      filter: blur(0px);
+      transform: translate(0, 0);
+    }
+}
+  
+  .animate-glitch {
+    animation: glitch 5s infinite;
+}

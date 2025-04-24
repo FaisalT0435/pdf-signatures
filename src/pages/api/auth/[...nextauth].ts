@@ -3,6 +3,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
 import MicrosoftProvider from 'next-auth/providers/azure-ad';
 
+
 export default NextAuth({
   providers: [
     GoogleProvider({

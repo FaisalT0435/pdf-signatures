@@ -55,7 +55,7 @@
 
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useState } from 'react';
 import Link from 'next/link';
 import './../styles/global.css';
@@ -103,10 +103,10 @@ export default function HomePage() {
             className="mb-4 px-4 py-2 rounded bg-neutral-800 text-white"
           />
           <div className="flex justify-between mb-4">
-            <Link href="/app/auth/login">
+            <Link href="/auth/login">
               <button className="bg-blue-600 px-6 py-3 rounded font-semibold">Login</button>
             </Link>
-            <Link href="/app/auth/signup">
+            <Link href="/auth/signup">
               <button className="bg-grey-600 px-6 py-3 rounded font-semibold">Sign Up</button>
             </Link>
           </div>

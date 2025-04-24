@@ -20,6 +20,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
+      "@/*": ["src/*"],
       "@/lib/*": [
         "lib/*"
       ]
@@ -39,5 +40,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  
 }

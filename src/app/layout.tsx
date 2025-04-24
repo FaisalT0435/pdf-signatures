@@ -1,7 +1,7 @@
 // src/app/layout.tsx
 'use client';
 
-import './../styles/global.css';
+import './globals.css';
 import { SessionProvider } from 'next-auth/react';
 import type { ReactNode } from 'react';
 

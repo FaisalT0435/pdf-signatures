@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model history {
+  id        Int       @id @default(autoincrement())
+  uploadId  Int?
+  action    String?   @db.VarChar(100)
+  timestamp DateTime? @default(now()) @db.DateTime(0)
+  ipAddress String?   @db.VarChar(255)
+  userAgent String?   @db.VarChar(255)
+  uploads   uploads?  @relation(fields: [uploadId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "history_ibfk_1")
+
+  @@index([uploadId], map: "uploadId")
+}
+
+model uploads {
+  id              Int                      @id @default(autoincrement())
+  userId          Int?
+  fileName        String?                  @db.VarChar(255)
+  filePath        String?                  @db.VarChar(255)
+  signatureStatus uploads_signatureStatus?
+  createdAt       DateTime?                @default(now()) @db.DateTime(0)
+  history         history[]
+  users           users?                   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "uploads_ibfk_1")
+
+  @@index([userId], map: "userId")
+}
+
+model users {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique(map: "email") @db.VarChar(255)
+  password  String?   @db.VarChar(255)
+  createdAt DateTime? @default(now()) @db.DateTime(0)
+  uploads   uploads[]
+}
+
+enum uploads_signatureStatus {
+  original
+  edited
+}

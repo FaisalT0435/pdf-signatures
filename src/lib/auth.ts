@@ -1,11 +1,12 @@
-import GoogleProvider from 'next-auth/providers/google';
-import GitHubProvider from 'next-auth/providers/github';
-import AzureADProvider from 'next-auth/providers/azure-ad';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { db } from './db';
-import bcrypt from 'bcryptjs';
+// lib/auth.ts
+import GoogleProvider from 'next-auth/providers/google'
+import GitHubProvider from 'next-auth/providers/github'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { prisma } from './db'
 
 export const authOptions = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -15,40 +16,24 @@ export const authOptions = {
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
-    AzureADProvider({
-      clientId: process.env.MICROSOFT_CLIENT_ID!,
-      clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
-      tenantId: process.env.MICROSOFT_TENANT_ID!,
-    }),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' },
+        email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const user = await db.user.findUnique({ where: { email: credentials!.email } });
-        if (!user || !bcrypt.compareSync(credentials!.password, user.password)) {
-          throw new Error('Invalid credentials');
-        }
-        return { id: user.id, email: user.email };
+        // Validasi user manual dari DB di sini
       },
     }),
   ],
-  callbacks: {
-    async session({ session, token }) {
-      if (token?.email) {
-        session.user.email = token.email;
-      }
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) token.email = user.email;
-      return token;
-    },
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt',
   },
   pages: {
     signIn: '/auth/login',
+    signOut: '/auth/logout',
+    error: '/auth/error',
   },
-  secret: process.env.NEXTAUTH_SECRET,
-};
+}

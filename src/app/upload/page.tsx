@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function HomePage() {
+export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
@@ -60,19 +60,16 @@ export default function HomePage() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-neutral-900 text-white p-10">
-      <img
-        src="/logo/logo-preview.png"
-        alt="Logo"
-        className="w-55 h-55 mb-1 animate-glitch"
-      />
-      <h1 className="text-3xl font-bold mb-2">Upload & Preview PDF</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-neutral-900 text-white">
+      <h1 className="text-2xl font-bold mb-4">Upload & Preview PDF</h1>
 
       {/* File Input */}
-      <label className="cursor-pointer bg-red-600 px-6 py-3 rounded mb-4">
-        Select PDF file
-        <input type="file" accept="application/pdf" onChange={handleFileChange} hidden />
-      </label>
+      <input
+        type="file"
+        accept="application/pdf"
+        onChange={handleFileChange}
+        className="mb-4"
+      />
 
       {/* Preview PDF */}
       {previewURL && (
@@ -107,6 +104,6 @@ export default function HomePage() {
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }

@@ -1,11 +1,14 @@
-import mysql from 'mysql2/promise';
+// lib/db.ts
+import { PrismaClient } from '@prisma/client'
 
-export const pool = mysql.createPool({
-  host: process.env.DB_HOST, // Endpoint RDS
-  user: process.env.DB_USER, // Username RDS
-  password: process.env.DB_PASS, // Password RDS
-  database: process.env.DB_NAME, // Nama database
-  waitForConnections: true,
-  connectionLimit: 10, // Jumlah koneksi maksimum
-  queueLimit: 0,
-});
+const globalForPrisma = global as unknown as {
+  prisma: PrismaClient | undefined
+}
+
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: ['query'],
+  })
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
